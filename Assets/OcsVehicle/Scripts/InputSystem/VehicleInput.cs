@@ -1,4 +1,4 @@
-// GENERATED AUTOMATICALLY FROM 'Assets/OcsVehicle/Scripts/InputSystem/VehicleInput.inputactions'
+// GENERATED AUTOMATICALLY FROM 'Assets/OpenConstructionSimulator/Assets/OcsVehicle/Scripts/InputSystem/VehicleInput.inputactions'
 
 using System;
 using System.Collections;
@@ -514,6 +514,39 @@ namespace Ocs.Input
                     ""name"": ""negative"",
                     ""id"": ""00fe324b-3bc5-41cd-b2ed-cbb82e5726d8"",
                     ""path"": ""<Keyboard>/n"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Work"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""1D Axis"",
+                    ""id"": ""b8d01f4a-d706-421a-9220-0c7f0f6cdd68"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Work"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""e7947233-8b8e-476f-9fe9-e36888982f95"",
+                    ""path"": ""<Gamepad>/rightStick/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Work"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""7d6cdae1-67fb-476d-80d1-1f9af3c31b80"",
+                    ""path"": ""<Gamepad>/rightStick/down"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
