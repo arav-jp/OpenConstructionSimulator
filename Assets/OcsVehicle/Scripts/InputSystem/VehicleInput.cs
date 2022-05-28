@@ -1,4 +1,4 @@
-// GENERATED AUTOMATICALLY FROM 'Assets/OpenConstructionSimulator/Assets/OcsVehicle/Scripts/InputSystem/VehicleInput.inputactions'
+// GENERATED AUTOMATICALLY FROM 'Assets/OcsVehicle/Scripts/InputSystem/VehicleInput.inputactions'
 
 using System;
 using System.Collections;
