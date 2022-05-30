@@ -44,6 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 646ab09f02bc9e9c68cd164381f66daa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isPlaying: 1
   _wheelLoader: {fileID: 623555346003556661, guid: 0f2126c39b33f04c69a48a858d3da655, type: 3}
   _backHoe: {fileID: 289612748941303944, guid: b95cc24db490cac41ae56653ece10b78, type: 3}
   _truck: {fileID: 93083377421715034, guid: e3421758c6b391440b451f4efe981fae, type: 3}

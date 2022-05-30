@@ -5,6 +5,8 @@ using UnityEngine;
 namespace Ocs.GameSystem{
     public class StageManager : MonoBehaviour
     {
+        public bool isPlaying;
+
         [Header("Vehicle prefab")]
         [Tooltip("set vehicle prefab")]
         [SerializeField] private GameObject _wheelLoader;
@@ -29,39 +31,43 @@ namespace Ocs.GameSystem{
         {
             var set = GameSetting.setting;
 
-            if(set.WheelLoader.valid){
-                Instantiate(_wheelLoader, set.WheelLoader.position, Quaternion.Euler(set.WheelLoader.rotation));
-            }
-            if(set.BackHoe.valid){
-                Instantiate(_backHoe, set.BackHoe.position, Quaternion.Euler(set.BackHoe.rotation));
-            }
-            if(set.Truck.valid){
-                Instantiate(_truck, set.Truck.position, Quaternion.Euler(set.Truck.rotation));
-            }
-
-            switch (set.timeZone)
-            {
-                case StageSetting.TimeZone.Noon:
-                    RenderSettings.skybox = _noonSky;
-                    sunLight.intensity = noonLightIntensity;
-                    break;
-                case StageSetting.TimeZone.Evening:
-                    RenderSettings.skybox = _eveningSky;
-                    sunLight.intensity = eveningLightIntensity;
-                    break;
-                case StageSetting.TimeZone.Night:
-                    RenderSettings.skybox = _nightSky;
-                    sunLight.intensity = nightLightIntensity;
-                    break;
-                default:
-                    break;
+            if(isPlaying){
+                if(set.WheelLoader.valid){
+                    Instantiate(_wheelLoader, set.WheelLoader.position, Quaternion.Euler(set.WheelLoader.rotation));
+                }
+                if(set.BackHoe.valid){
+                    Instantiate(_backHoe, set.BackHoe.position, Quaternion.Euler(set.BackHoe.rotation));
+                }
+                if(set.Truck.valid){
+                    Instantiate(_truck, set.Truck.position, Quaternion.Euler(set.Truck.rotation));
+                }
             }
         }
 
         // Update is called once per frame
         void Update()
         {
+            var set = GameSetting.setting;
             
+            if(!isPlaying){
+                switch (set.timeZone)
+                {
+                    case StageSetting.TimeZone.Noon:
+                        RenderSettings.skybox = _noonSky;
+                        sunLight.intensity = noonLightIntensity;
+                        break;
+                    case StageSetting.TimeZone.Evening:
+                        RenderSettings.skybox = _eveningSky;
+                        sunLight.intensity = eveningLightIntensity;
+                        break;
+                    case StageSetting.TimeZone.Night:
+                        RenderSettings.skybox = _nightSky;
+                        sunLight.intensity = nightLightIntensity;
+                        break;
+                    default:
+                        break;
+                }
+            }
         }
     }
 }
