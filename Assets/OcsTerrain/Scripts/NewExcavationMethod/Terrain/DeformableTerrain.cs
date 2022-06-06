@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,7 +15,7 @@ public class DeformableTerrain : MonoBehaviour
 
     [SerializeField] private TerrainData _terrainData;
 
-    [SerializeField] private Vector3 _terrainSize;
+    [SerializeField] public Vector3 _terrainSize;
 
     [SerializeField] private Vector3 _dimensionRatio;
 
@@ -30,7 +31,7 @@ public class DeformableTerrain : MonoBehaviour
 
     private void Awake()
     {
-        _sandManager = Object.FindObjectOfType<SandManager>();
+        _sandManager = UnityEngine.Object.FindObjectOfType<SandManager>();
 
         _terrain = GetComponent<Terrain>();
         _terrainData = _terrain.terrainData;
@@ -59,29 +60,75 @@ public class DeformableTerrain : MonoBehaviour
         
     }
 
-    public void SetHeight(Vector3 pos, float height)
+    private bool IsValidIndex(int z, int x)
     {
-        if (_noDeform) return;
-        int pos_z = (int)(pos.z * (_terrainHeightmapResolution - 1) / _terrainSize.z);
-        int pos_x = (int)(pos.x * (_terrainHeightmapResolution - 1) / _terrainSize.x);
-        _heightmap[pos_z, pos_x] = height / _terrainSize.y;
-        _heightmap[pos_z+1, pos_x] = height / _terrainSize.y;
-        _heightmap[pos_z -1, pos_x] = height / _terrainSize.y;
-        _heightmap[pos_z, pos_x+1] = height / _terrainSize.y;
-        _heightmap[pos_z, pos_x-1] = height / _terrainSize.y;
-        _heightmap[pos_z + 1, pos_x + 1] = height / _terrainSize.y;
-        _heightmap[pos_z + 1, pos_x - 1] = height / _terrainSize.y;
-        _heightmap[pos_z - 1, pos_x + 1] = height / _terrainSize.y;
-        _heightmap[pos_z - 1, pos_x - 1] = height / _terrainSize.y;
+        if (z < 0 || z >= _heightmap.GetLength(0) || x < 0 || x >= _heightmap.GetLength(1)) return false;
+        return true;
     }
 
     public float GetHeight(Vector3 pos)
     {
         int pos_z = (int)(pos.z * (_terrainHeightmapResolution - 1) / _terrainSize.z);
         int pos_x = (int)(pos.x * (_terrainHeightmapResolution - 1) / _terrainSize.x);
-        return _heightmap[pos_z, pos_x] * _terrainSize.y;
+        return GetHeight(pos_z, pos_x);
     }
 
+    public float GetHeight(int z, int x)
+    {
+        return IsValidIndex(z, x) ? _heightmap[z, x]*_terrainSize.y : 0.0f;
+    }
+
+    public void SetHeight(Vector3 pos, float height)
+    {
+        if (_noDeform) return;
+
+        int pos_z = (int)(pos.z * (_terrainHeightmapResolution - 1) / _terrainSize.z);
+        int pos_x = (int)(pos.x * (_terrainHeightmapResolution - 1) / _terrainSize.x);
+        SetHeight(pos_z, pos_x, height);
+    }
+
+    public void SetHeight(Vector3 pos_start, Vector3 pos_end, float height)
+    {
+        if (_noDeform) return;
+
+        int pos_z_start, pos_z_end;
+        if (pos_start.z < pos_end.z)
+        {
+            pos_z_start = (int)(pos_start.z * (_terrainHeightmapResolution - 1) / _terrainSize.z);
+            pos_z_end = (int)(pos_end.z * (_terrainHeightmapResolution - 1) / _terrainSize.z);
+        }
+        else
+        {
+            pos_z_end = (int)(pos_start.z * (_terrainHeightmapResolution - 1) / _terrainSize.z);
+            pos_z_start = (int)(pos_end.z * (_terrainHeightmapResolution - 1) / _terrainSize.z);
+        }
+
+        int pos_x_start, pos_x_end;
+        if (pos_start.x < pos_end.x)
+        {
+            pos_x_start = (int)(pos_start.x * (_terrainHeightmapResolution - 1) / _terrainSize.x);
+            pos_x_end = (int)(pos_end.x * (_terrainHeightmapResolution - 1) / _terrainSize.x);
+        }
+        else
+        {
+            pos_x_end = (int)(pos_start.x * (_terrainHeightmapResolution - 1) / _terrainSize.x);
+            pos_x_start = (int)(pos_end.x * (_terrainHeightmapResolution - 1) / _terrainSize.x);
+        }
+
+        for (int i = pos_z_start; i <= pos_z_end; i++)
+            for (int j = pos_x_start; j <= pos_x_end; j++)
+                SetHeight(i, j, height);
+    }
+
+    private void SetHeight(int z, int x, float height)
+
+    {
+        float h = height / _terrainSize.y;
+        for (int i = -1; i < 2; i++)
+            for (int j = -1; j < 2; j++)
+                if (IsValidIndex(z + i, x + j))
+                    _heightmap[z + i, x + j] = h;
+    }
 
     private IEnumerator UpdateTerrainCoroutine()
     {

@@ -6,6 +6,7 @@ using UnityEngine;
 public class Excavator : MonoBehaviour
 {
     [Header("Parameters")]
+    [SerializeField] private float _minForceToExcavate;
     [SerializeField] private LayerMask _terrainLayer;
 
     [Header("Informations(No need to input)")]
@@ -16,6 +17,7 @@ public class Excavator : MonoBehaviour
 
     [Header("Debug")]
     [SerializeField] private bool _showForceArrow;
+    [SerializeField] private bool _isExcavating;
 
     private void Awake()
     {
@@ -41,24 +43,52 @@ public class Excavator : MonoBehaviour
     {
         if (collision.gameObject.tag != "Terrain") return;
 
-        Vector3 force = -collision.impulse.normalized;
-        force.y = 0.0f;
-        force = force.normalized;
+        if (collision.impulse.magnitude == 0) return;
+
+        Vector3 force = -collision.impulse / Time.fixedDeltaTime / (float)collision.contacts.Length;
+        force.y = 0;
+        
+        if (force.magnitude < _minForceToExcavate) return;
 
         foreach (ContactPoint cp in collision.contacts)
         {
-            Vector3 pos = cp.point;
-            float height = _deformableTerrain.GetHeight(pos);
-            _deformableTerrain.SetHeight(pos, pos.y-0.1f);
-            _sandManager.Spawn(pos + Vector3.up*_sandManager._sandRadius*3);
+            Vector3 pos_cp = cp.point;
+            Vector3 pos_sp = cp.point + force.normalized*_sandManager._maxSandRadius*2;
+
+            _deformableTerrain.SetHeight(pos_cp, pos_sp, pos_cp.y - _sandManager._maxSandRadius);
+
+            RaycastHit hit;
+            if (Physics.Raycast(new Vector3(pos_sp.x, _deformableTerrain._terrainSize.y + 0.1f, pos_sp.z), Vector3.down, out hit, _deformableTerrain._terrainSize.y + 0.2f, _terrainLayer))
+            {
+                if (hit.collider.tag == "Terrain")
+                {
+                    float height_sp = _deformableTerrain._terrainSize.y - hit.distance;
+                    while (height_sp > pos_cp.y)
+                    {
+                        float radius = Random.Range(_sandManager._minSandRadius, _sandManager._maxSandRadius);
+                        if (radius*2 > height_sp - pos_cp.y) radius = (height_sp -  pos_cp.y)/0.5f;
+                        _sandManager.Spawn(new Vector3(pos_sp.x, height_sp, pos_sp.z));
+                        height_sp -= radius*2;
+                    }
+                    
+                }
+            }
+
 #if UNITY_EDITOR
             if (_showForceArrow)
             {
-                Debug.DrawLine(pos, pos - collision.impulse.normalized, Color.white);
+                Debug.DrawLine(pos_cp, pos_sp, Color.white);
             }
 #endif
         }
+        
 
         _deformableTerrain.OnHeightmapChanged();
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.tag != "Terrain") return;
+        _isExcavating = false;
     }
 }

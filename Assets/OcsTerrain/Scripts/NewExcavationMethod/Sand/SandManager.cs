@@ -15,7 +15,9 @@ public class SandManager : MonoBehaviour
 
     [Header("Parameters")]
     [SerializeField] private float _updateInterval = 0.1f;
-    [SerializeField] public float _sandRadius = 0.25f;
+    [SerializeField] public float _minSandRadius = 0.1f;
+    [SerializeField] public float _maxSandRadius = 0.3f;
+    [SerializeField] public float _sandDensity = 100.0f;
     [SerializeField] private GameObject _sandPrefab;
     [SerializeField] private int _maxSandCount;
     [SerializeField] private float _minAltitude = 0.0f;
@@ -62,14 +64,23 @@ public class SandManager : MonoBehaviour
     public bool Spawn(Vector3 pos)
     {
         if (_sandCount >= _maxSandCount) return false;
+        float radius = Random.Range(_minSandRadius, _maxSandRadius);
+        return Spawn(pos, radius);
+    }
 
-        for(int i = 0; i < _maxSandCount; i++)
+    public bool Spawn(Vector3 pos, float radius)
+    {
+        if (_sandCount >= _maxSandCount) return false;
+
+        for (int i = 0; i < _maxSandCount; i++)
         {
             if (!_sand[i].isActivated)
             {
                 _sand[i].rb.gameObject.transform.position = pos;
+                _sand[i].rb.mass = radius * radius * radius * _sandDensity;
                 _sand[i].isActivated = true;
                 _sand[i].time = Time.time;
+                _sand[i].sandScript._radius = radius;
                 _sand[i].rb.gameObject.SetActive(true);
                 _sandCount++;
                 return true;
@@ -102,12 +113,14 @@ public class SandManager : MonoBehaviour
             {
                 _sand[i].rb.velocity = Vector3.zero;
                 Dispose(i);
+                continue;
             }
             if (_sand[i].rb.IsSleeping() && _sand[i].sandScript._onTerrain)
             {
-                if (Time.time - _sand[i].time < 2.0f) return;
+                if (Time.time - _sand[i].time < 5.0f) continue;
+                _sand[i].time = Time.time;
                 RaycastHit hit;
-                if (Physics.SphereCast(_sand[i].rb.transform.position + Vector3.up*_sandRadius*2, _sandRadius, Vector3.down, out hit, 10.0f, ~_sandLayer))
+                if (Physics.Raycast(_sand[i].rb.transform.position + Vector3.up*_deformableTerrain._terrainSize.y, Vector3.down, out hit, transform.position.y + _deformableTerrain._terrainSize.y + _maxSandRadius, ~_sandLayer))
                 {
                     if(hit.collider.tag == "Terrain")
                     {
