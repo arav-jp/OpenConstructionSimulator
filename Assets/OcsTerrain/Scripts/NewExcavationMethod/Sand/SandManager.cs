@@ -78,6 +78,7 @@ public class SandManager : MonoBehaviour
             {
                 _sand[i].rb.gameObject.transform.position = pos;
                 _sand[i].rb.mass = radius * radius * radius * _sandDensity;
+                _sand[i].rb.maxAngularVelocity = 1.0f;
                 _sand[i].isActivated = true;
                 _sand[i].time = Time.time;
                 _sand[i].sandScript._radius = radius;

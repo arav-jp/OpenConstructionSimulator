@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 8272065981377313326}
   - component: {fileID: 8272065981377313327}
   - component: {fileID: 5810585741177248655}
-  - component: {fileID: 6457755245147426207}
   m_Layer: 10
   m_Name: Sand
   m_TagString: Sand
@@ -63,7 +62,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 6763fdb7dd3a7ec42aa9943765a0ea7e, type: 2}
+  - {fileID: 2100000, guid: 495d24e1ff9222a48b8b2506a08b4f4d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -131,24 +130,3 @@ MonoBehaviour:
   _radius: 0
   _onTerrain: 0
   _sandManager: {fileID: 0}
---- !u!114 &6457755245147426207
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8272065981377313324}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b8f7d6ffa4661fe4e82559ba2a3389a1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _minForceToExcavate: 400
-  _terrainLayer:
-    serializedVersion: 2
-    m_Bits: 512
-  _deformableTerrain: {fileID: 0}
-  _sandManager: {fileID: 0}
-  _rigidbody: {fileID: 0}
-  _showForceArrow: 0
-  _isExcavating: 0
