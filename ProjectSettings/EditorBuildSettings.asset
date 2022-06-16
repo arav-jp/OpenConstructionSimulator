@@ -4,8 +4,5 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes:
-  - enabled: 1
-    path: Assets/OcsTerrain/Scenes/NewExcavationMethod.unity
-    guid: a38bb0034b58fd948949755bbc145176
+  m_Scenes: []
   m_configObjects: {}
