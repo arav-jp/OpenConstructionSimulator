@@ -14,8 +14,8 @@ namespace Ocs.Vehicle
         private float _steeringVel = 0;
         
         [Header("- Work Setting -")]
-        [SerializeField] private CylinderDrivenJoint _boom;
-        [SerializeField] private CylinderDrivenJoint _bucket;
+        [SerializeField] private CylinderDrivenJoint_Physics _boom;
+        [SerializeField] private CylinderDrivenJoint_Physics _bucket;
         [SerializeField] private float _controlSpeed;
         
         public float BoomInput { get; set; }
