@@ -953,7 +953,7 @@ MonoBehaviour:
   _minAngle: 0
   _maxAngle: 90
   _inverse_motor: 1
-  _inverse_sensor: 1
+  _inverse_sensor: 0
   _useLimitsForRotation: 1
   _joint: {fileID: 0}
   _this_transform: {fileID: 0}

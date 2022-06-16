@@ -23,10 +23,10 @@ namespace Ocs.Vehicle
         public float WinkerIntensity { get => _winkerIntensity; }
 
         [Header("- Arm Setting -")]
-        [SerializeField] private CylinderDrivenJoint _base;
-        [SerializeField] private CylinderDrivenJoint _boom;
-        [SerializeField] private CylinderDrivenJoint _arm;
-        [SerializeField] private CylinderDrivenJoint _end;
+        [SerializeField] private CylinderDrivenJoint_Physics _base;
+        [SerializeField] private CylinderDrivenJoint_Physics _boom;
+        [SerializeField] private CylinderDrivenJoint_Physics _arm;
+        [SerializeField] private CylinderDrivenJoint_Physics _end;
         [SerializeField] private float _controlSpeed_base;
         [SerializeField] private float _controlSpeed_boom;
         [SerializeField] private float _controlSpeed_arm;
