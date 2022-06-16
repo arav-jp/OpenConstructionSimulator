@@ -10,7 +10,12 @@ public class DeformableTerrain : MonoBehaviour
     [Header("Parameters")]
     [SerializeField] private Terrain _terrain;
 
+    [SerializeField] private float _terrainDepth;
+
     [Header("Informations(No need to input)")]
+    
+    [SerializeField] public Vector3 _offset;
+
     [SerializeField] private SandManager _sandManager;
 
     [SerializeField] private TerrainData _terrainData;
@@ -47,6 +52,8 @@ public class DeformableTerrain : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        SetOffset(_terrainDepth);
+        _offset = new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z);
     }
 
     private void OnEnable()
@@ -66,8 +73,25 @@ public class DeformableTerrain : MonoBehaviour
         return true;
     }
 
+    private void SetOffset(float offset)
+    {
+        for (int i = 0; i < this._terrainHeightmapResolution; i++)
+        {
+            for (int j = 0; j < this._terrainHeightmapResolution; j++)
+            {
+                _heightmap[j, i] += offset * _dimensionRatio.y;
+            }
+        }
+        _terrain.terrainData.SetHeightsDelayLOD(0, 0, _heightmap);
+
+        Vector3 pos = this.transform.position;
+        pos.y -= _terrainDepth;
+        this.transform.position = pos;
+    }
+
     public float GetHeight(Vector3 pos)
     {
+        pos -= _offset;
         int pos_z = (int)(pos.z * (_terrainHeightmapResolution - 1) / _terrainSize.z);
         int pos_x = (int)(pos.x * (_terrainHeightmapResolution - 1) / _terrainSize.x);
         return GetHeight(pos_z, pos_x);
@@ -82,6 +106,8 @@ public class DeformableTerrain : MonoBehaviour
     {
         if (_noDeform) return;
 
+        pos -= _offset;
+
         int pos_z = (int)(pos.z * (_terrainHeightmapResolution - 1) / _terrainSize.z);
         int pos_x = (int)(pos.x * (_terrainHeightmapResolution - 1) / _terrainSize.x);
         SetHeight(pos_z, pos_x, height);
@@ -90,6 +116,9 @@ public class DeformableTerrain : MonoBehaviour
     public void SetHeight(Vector3 pos_start, Vector3 pos_end, float height)
     {
         if (_noDeform) return;
+
+        pos_start -= _offset;
+        pos_end -= _offset;
 
         int pos_z_start, pos_z_end;
         if (pos_start.z < pos_end.z)
@@ -121,8 +150,8 @@ public class DeformableTerrain : MonoBehaviour
     }
 
     private void SetHeight(int z, int x, float height)
-
     {
+        height -= _offset.y;
         float h = height / _terrainSize.y;
         for (int i = -1; i < 2; i++)
             for (int j = -1; j < 2; j++)

@@ -6,6 +6,7 @@ using UnityEngine;
 public class Excavator : MonoBehaviour
 {
     [Header("Parameters")]
+    [SerializeField] private float _minForceToExcavate;
     [SerializeField] private LayerMask _terrainLayer;
 
     [Header("Informations(No need to input)")]
@@ -44,6 +45,8 @@ public class Excavator : MonoBehaviour
 
         if (collision.impulse.magnitude == 0) return;
         Vector3 force = -collision.impulse / Time.fixedDeltaTime / (float)collision.contacts.Length;
+
+        if (force.magnitude < _minForceToExcavate) return;
         //force.y = 0;
 
         foreach (ContactPoint cp in collision.contacts)
@@ -61,11 +64,11 @@ public class Excavator : MonoBehaviour
                 Vector3 pos_sp = pos_cp + force.normalized * i;
 
                 RaycastHit hit;
-                if(Physics.Raycast(new Vector3(pos_sp.x, _deformableTerrain._terrainSize.y, pos_sp.z), Vector3.down, out hit, _deformableTerrain._terrainSize.y, _terrainLayer))
+                if(Physics.Raycast(new Vector3(pos_sp.x, _deformableTerrain._terrainSize.y + _deformableTerrain._offset.y, pos_sp.z), Vector3.down, out hit, _deformableTerrain._terrainSize.y, _terrainLayer))
                 {
                     if(hit.collider.tag == "Terrain")
                     {
-                        float height_sp = _deformableTerrain._terrainSize.y - hit.distance;
+                        float height_sp = _deformableTerrain._terrainSize.y + _deformableTerrain._offset.y - hit.distance;
                         while(height_sp > pos_cp.y)
                         {
                             float spawnRadius = Random.Range(_sandManager._minSandRadius, radius);

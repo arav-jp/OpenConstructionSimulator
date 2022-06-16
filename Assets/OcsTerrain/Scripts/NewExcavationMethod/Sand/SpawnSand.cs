@@ -46,6 +46,7 @@ public class SpawnSand : MonoBehaviour
         if(giveMassToNearObj(_radius + _sandManager._maxSandRadius))
         {
             _sandManager.Dispose(_id);
+            _mc.enabled = true;
         }
         else
         {
@@ -65,7 +66,7 @@ public class SpawnSand : MonoBehaviour
             var targetDistance = Vector3.Distance(transform.position, target.transform.position);
             if (targetDistance < threshold)
             {
-                target.SendMessage("ReceiveMass", _rb.mass);
+                target.SendMessage("ReceiveMass", _rb.mass*0.5f);
                 return true;
             }
         }
