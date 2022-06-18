@@ -15,16 +15,23 @@ namespace Ocs.GameSystem{
         //[SerializeField] private Color loadToColor = Color.black;
         //[SerializeField] private float fadeRate = 1.0f;
 
+        private void Awake()
+        {
+            _terrain = GameObject.FindObjectOfType<DeformableTerrain>();
+        }
+
         public void SwitchScene()
         {
-            _terrain.RestoreTerrain();
+            if(_terrain)
+                _terrain.RestoreTerrain();
             //Initiate.Fade(_sceneName, loadToColor, fadeRate);
             SceneManager.LoadScene(this._sceneName);
         }
 
         public void StageTransition()
         {
-            _terrain.RestoreTerrain();
+            if(_terrain)
+                _terrain.RestoreTerrain();
             SceneManager.LoadScene(GameSetting.setting.stage);
         }
 
