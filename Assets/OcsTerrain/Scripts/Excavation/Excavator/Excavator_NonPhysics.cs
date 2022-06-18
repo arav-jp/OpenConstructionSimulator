@@ -85,6 +85,7 @@ public class Excavator_NonPhysics : MonoBehaviour
                         _terrainManager.SetHeight(target, height_sp - spawnRadius * 2);
                         _sandManager.Spawn(new Vector3(target.x, height_sp, target.z));
                         height_sp -= spawnRadius * 2;
+                        _terrainManager.OnHeightmapChanged();
                     }
                 }
             }
