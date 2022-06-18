@@ -45,7 +45,7 @@ public class SpawnSand : MonoBehaviour
 
         if(giveMassToNearObj(_radius + _sandManager._maxSandRadius))
         {
-            _sandManager.Dispose(_id);
+            //_sandManager.Dispose(_id);
             _mc.enabled = true;
         }
         else

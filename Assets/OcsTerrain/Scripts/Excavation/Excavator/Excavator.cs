@@ -49,6 +49,8 @@ public class Excavator : MonoBehaviour
         if (force.magnitude < _minForceToExcavate) return;
         //force.y = 0;
 
+        _isExcavating = true;
+
         foreach (ContactPoint cp in collision.contacts)
         {
             Vector3 pos_cp = cp.point;
