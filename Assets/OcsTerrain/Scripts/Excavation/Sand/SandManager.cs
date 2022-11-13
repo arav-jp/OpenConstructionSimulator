@@ -125,7 +125,7 @@ public class SandManager : MonoBehaviour
                 {
                     if(hit.collider.tag == "Terrain")
                     {
-                        _deformableTerrain.SetHeight(_sand[i].rb.transform.position, _sand[i].rb.transform.position.y);
+                        _deformableTerrain.SetHeight(_sand[i].rb.transform.position, _sand[i].rb.transform.position.y + _sand[i].sandScript._radius);
                         Dispose(i);
                         terrainUpdate = true;
                     }
