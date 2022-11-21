@@ -112,7 +112,7 @@ public class SandManager : MonoBehaviour
             if (!_sand[i].isActivated) continue;
             if (_sand[i].rb.transform.position.y < _minAltitude)
             {
-                _deformableTerrain.SetHeight(_sand[i].rb.transform.position, _sand[i].rb.transform.position.y + _sand[i].sandScript._radius);
+                _deformableTerrain.AddOffset(_sand[i].sandScript._radius/(_deformableTerrain.terrainHeightmapResolution*_deformableTerrain.terrainHeightmapResolution));
                 Dispose(i);
                 terrainUpdate = true;
                 continue;
